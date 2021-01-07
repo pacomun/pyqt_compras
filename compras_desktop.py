@@ -23,6 +23,22 @@ class My_QMainWindow(QtW.QMainWindow):
         grupos = self.lst.grupos()
         for g in grupos:
             self.grupos.addItem(g)
+        self.grupos.itemActivated.connect(self.mostrar_productos)
+
+    def mostrar_productos(self, e):
+        self.productos.clear()
+        self.productos.setColumnCount(3)
+        self.productos.setHorizontalHeaderLabels(['id', 'Productos',
+                                            'Estado'])
+        elementos = self.lst.conseguir_elementos(e.text())
+        self.productos.setRowCount(len(elementos))
+        for fila in range(len(elementos)):
+            id = QtW.QTableWidgetItem(str(elementos[fila][0]))
+            product = QtW.QTableWidgetItem(str(elementos[fila][1]))
+            estado = QtW.QTableWidgetItem(str(elementos[fila][2]))
+            self.productos.setItem(fila, 0, id)
+            self.productos.setItem(fila, 1 , product)
+            self.productos.setItem(fila, 2, estado)
 
 
 if __name__ == '__main__':

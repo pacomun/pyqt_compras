@@ -69,6 +69,7 @@ class ListaCompra():
         return ids
 
     def cambiar_estado(self, grupo, indice, estado):
+        """Cambia el estado de un producto."""
         tabla = self.__carga_tabla(grupo)
         actualizar = tabla.update().where(
             tabla.c.id == indice).values(estado=estado)

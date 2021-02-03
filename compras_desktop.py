@@ -39,14 +39,14 @@ class MyQMainWindow(QtW.QMainWindow):
         indice = self.productos.item(fila, 0)
         self.statusbar.showMessage(f'fila: {fila + 1}, Columna: {columna + 1}')
         if columna == 2:
-            estados = ['0', '1']
+            estados = ['HAY', 'COMPRAR']
             estado, ok = QtW.QInputDialog.getItem(self, 'Editar estado',
                                                   'Introduce el nuevo estado',
                                                   estados)
             print('Estado:', estado, 'OK:', ok)
             if ok:
                 self.lst.cambiar_estado(self.__grupo_selec.text(),
-                                        indice.text(), int(estado))
+                                        indice.text(), str_to_bool(estado))
                 print('Id_producto: ', indice.text())
                 self.mostrar_productos(self.__grupo_selec)
         elif columna == 1:

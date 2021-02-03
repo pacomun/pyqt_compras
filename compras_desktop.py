@@ -1,5 +1,6 @@
 import sys
 import PyQt5.QtWidgets as QtW
+from PyQt5.QtCore import Qt
 from formulario import Ui_MainWindow
 from bd_supermercado import ListaCompra
 
@@ -20,20 +21,20 @@ class MyQMainWindow(QtW.QMainWindow):
         self.productos = self.ui.productos
         self.statusbar = self.ui.statusbar
         self.menu = self.ui.menubar
-        self.actualizar_gupos()
+        self.actualizar_grupos()
         self.__grupo_selec = None
         self.grupos.itemActivated.connect(self.mostrar_productos)
         self.productos.cellDoubleClicked.connect(self.celda_act)
 
-    def actualizar_gupos(self):
-        """  lista los grupos"""
+    def actualizar_grupos(self):
+        """Lista los grupos"""
         self.lst = ListaCompra(URI_BASE)
         grupos = self.lst.grupos()
         for g in grupos:
             self.grupos.addItem(g)
 
     def celda_act(self, *vargs):
-        """ Edita el estado o producto"""
+        """Edita el estado o producto"""
         fila, columna = vargs
         indice = self.productos.item(fila, 0)
         self.statusbar.showMessage(f'fila: {fila + 1}, Columna: {columna + 1}')
@@ -60,8 +61,10 @@ class MyQMainWindow(QtW.QMainWindow):
             indice = QtW.QTableWidgetItem(str(elementos[fila][0]))
             product = QtW.QTableWidgetItem(str(elementos[fila][1]))
             estado = QtW.QTableWidgetItem(str(elementos[fila][2]))
+            indice.setTextAlignment(Qt.AlignRight)
             self.productos.setItem(fila, 0, indice)
             self.productos.setItem(fila, 1, product)
+            estado.setTextAlignment(Qt.AlignHCenter)
             self.productos.setItem(fila, 2, estado)
 
 

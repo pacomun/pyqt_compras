@@ -3,6 +3,7 @@ import PyQt5.QtWidgets as QtW
 from PyQt5.QtCore import Qt
 from formulario import Ui_MainWindow
 from bd_supermercado import ListaCompra
+from conversiones import str_to_bool, bool_to_str
 
 
 URI_BASE = 'mysql+pymysql://supermercado:@netbook/supermercado'
@@ -11,7 +12,6 @@ URI_BASE = 'mysql+pymysql://supermercado:@netbook/supermercado'
 class MyQMainWindow(QtW.QMainWindow):
     """Primer acercamiento a la aplicación de escritorio para lista de
     compras en supermerdado.
-
     """
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -60,7 +60,7 @@ class MyQMainWindow(QtW.QMainWindow):
         for fila in range(len(elementos)):
             indice = QtW.QTableWidgetItem(str(elementos[fila][0]))
             product = QtW.QTableWidgetItem(str(elementos[fila][1]))
-            estado = QtW.QTableWidgetItem(str(elementos[fila][2]))
+            estado = QtW.QTableWidgetItem(bool_to_str(elementos[fila][2]))
             indice.setTextAlignment(Qt.AlignRight)
             self.productos.setItem(fila, 0, indice)
             self.productos.setItem(fila, 1, product)

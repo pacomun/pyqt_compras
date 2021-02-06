@@ -128,10 +128,16 @@
     <property name="title">
      <string>Lista</string>
     </property>
+    <addaction name="menu_limpiar_lista"/>
    </widget>
    <addaction name="menuLista"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="menu_limpiar_lista">
+   <property name="text">
+    <string>Limpiar lista</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections>
@@ -147,7 +153,7 @@
     </hint>
     <hint type="destinationlabel">
      <x>361</x>
-     <y>891</y>
+     <y>763</y>
     </hint>
    </hints>
   </connection>

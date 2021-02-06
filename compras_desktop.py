@@ -20,7 +20,9 @@ class MyQMainWindow(QtW.QMainWindow):
         self.grupos = self.ui.grupos
         self.productos = self.ui.productos
         self.statusbar = self.ui.statusbar
-        self.menu = self.ui.menubar
+        self.menu = self.ui.menuLista
+        self.menu_lista = self.menu.addAction('Limpiar lista.')
+        self.menu_lista.triggered.connect(self.reset_lista)
         self.actualizar_grupos()
         self.__grupo_selec = None
         self.grupos.itemActivated.connect(self.mostrar_productos)
@@ -82,6 +84,10 @@ class MyQMainWindow(QtW.QMainWindow):
             self.productos.setItem(fila, 1, product)
             estado.setTextAlignment(Qt.AlignHCenter)
             self.productos.setItem(fila, 2, estado)
+
+    def reset_lista(self):
+        grupos = self.lst.grupos()
+        print(grupos)
 
 
 if __name__ == '__main__':

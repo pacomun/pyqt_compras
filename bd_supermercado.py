@@ -1,8 +1,9 @@
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import Column, Integer, String, Table
 from sqlalchemy import MetaData
 from sqlalchemy.exc import NoSuchTableError, OperationalError
+
 
 
 URI_BASE = 'mysql+pymysql://supermercado:@netbook/supermercado'
@@ -31,11 +32,11 @@ class ListaCompra():
         except Exception as e:
             print(e)
 
-    def insertar(self, grupo, product, estado=0):
+    def insertar(self, grupo, producto, estado=0):
         try:
             grupo = Table(grupo, self.metadata, autoload=True,
                           autoload_with=self.engine)
-            ins = grupo.insert().values(product=product, estado=estado)
+            ins = grupo.insert().values(product=producto, estado=estado)
             self.engine.execute(ins)
         except Exception as e:
             print(e)
@@ -85,13 +86,34 @@ class ListaCompra():
         borrado = tabla.delete().where(tabla.c.id == indice)
         self.engine.execute(borrado)
 
+    def elemento(self, grupo, indice):
+        """ Consulta el registro de grupo e índice. """
+        stmt = "SELECT * FROM {} WHERE id = {}".format(
+                grupo, indice)
+        consulta = self.engine.execute(stmt).fetchone()
+        return consulta
+
+    def actualizar_registro(self, grupo,  registro):
+        tabla = self.__carga_tabla(grupo )
+        actualizar = tabla.update().where(
+            tabla.c.id == registro[0]
+        ).values(product=registro[1],
+                 estado=registro[2])
+        self.engine.execute(actualizar)
+
+
 
 if __name__ == '__main__':
     conn = ListaCompra()
-    conn.borrar_grupo('aseo_personal')
-    conn.borrar_grupo('congelados')
+    print('Se produce la conexión a la base de datos...')
+    print('Valor de "conn": ', conn)
     conn.crear_grupo('aseo_personal')
+    print('Se crea el grupo "aseo_personal".',
+          conn.grupos())
     conn.insertar('aseo_personal', 'Pasta de dientes')
+    print('Se inserta un elemento a "aseo_personal"...')
+    print('Consulta aseo_personal: ',
+          conn.conseguir_elementos('aseo_personal'))
     conn.crear_grupo('congelados')
     conn.insertar('congelados', 'guisantes', 1)
     print(conn.grupos())
@@ -99,7 +121,10 @@ if __name__ == '__main__':
     print(salida)
     for i in conn.conseguir_ids('aseo_personal'):
         print(i)
-
     conn.cambiar_estado('congelados', 1, 0)
     salida = conn.conseguir_elementos('congelados')
-    print(salida)
+    print('conn.conseguir_elementos("congelados")',salida)
+    print("conn.elemento('aseo_personal', 1): ",
+          conn.elemento('aseo_personal', 1))
+    conn.borrar_grupo('aseo_personal')
+    conn.borrar_grupo('congelados')

@@ -4,7 +4,7 @@ from PyQt5.QtCore import Qt
 from formulario import Ui_MainWindow
 from bd_supermercado import ListaCompra
 from conversiones import str_to_bool, bool_to_str
-
+from dialogos import DialogoEditar
 
 URI_BASE = 'mysql+pymysql://supermercado:@netbook/supermercado'
 
@@ -37,20 +37,36 @@ class MyQMainWindow(QtW.QMainWindow):
         """Edita el estado o producto"""
         fila, columna = vargs
         indice = self.productos.item(fila, 0)
-        self.statusbar.showMessage(f'fila: {fila + 1}, Columna: {columna + 1}')
+        self.statusbar.showMessage(
+            f'fila: {fila + 1}, Columna: {columna + 1}')
         if columna == 2:
             estados = ['HAY', 'COMPRAR']
-            estado, ok = QtW.QInputDialog.getItem(self, 'Editar estado',
-                                                  'Introduce el nuevo estado',
-                                                  estados)
+            estado, ok = QtW.QInputDialog.getItem(
+                self, 'Editar estado',
+                'Introduce el nuevo estado',
+                estados)
             print('Estado:', estado, 'OK:', ok)
             if ok:
                 self.lst.cambiar_estado(self.__grupo_selec.text(),
                                         indice.text(), str_to_bool(estado))
                 print('Id_producto: ', indice.text())
-                self.mostrar_productos(self.__grupo_selec)
+
         elif columna == 1:
-            pass
+            reg = self.lst.elemento(self.__grupo_selec.text(),
+                                    int(indice.text()))
+            registro = list(reg)
+            dialogo = DialogoEditar(registro, self, 'Editar Registo')
+            dialogo.show()
+            dialogo.exec_()
+            if registro == list(reg):
+                self.statusbar.showMessage(
+                    'Sin cambios en el registro')
+            else:
+                self.lst.actualizar_registro(
+                    self.__grupo_selec.text(), registro)
+        self.mostrar_productos(self.__grupo_selec)
+
+            
 
     def mostrar_productos(self, e):
         """Carga la tabla con el grupo escepecificado en 'e'"""

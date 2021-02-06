@@ -68,8 +68,6 @@ class MyQMainWindow(QtW.QMainWindow):
                     self.__grupo_selec.text(), registro)
         self.mostrar_productos(self.__grupo_selec)
 
-            
-
     def mostrar_productos(self, e):
         """Carga la tabla con el grupo escepecificado en 'e'"""
         self.__grupo_selec = e
@@ -86,8 +84,15 @@ class MyQMainWindow(QtW.QMainWindow):
             self.productos.setItem(fila, 2, estado)
 
     def reset_lista(self):
+        """Cambia al estado 0 para todos los productos."""
+        self.statusbar.showMessage('Limpiado la lista de compra, espere...')
         grupos = self.lst.grupos()
-        print(grupos)
+        for grupo in grupos:
+            self.statusbar.showMessage(f'Limpiado {grupo}')
+            ids = self.lst.conseguir_ids(grupo)
+            for i in ids:
+                self.lst.cambiar_estado(grupo, i, 0)
+        self.statusbar.showMessage('Se ha limpiado la lista.')
 
 
 if __name__ == '__main__':

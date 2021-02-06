@@ -1,4 +1,5 @@
 import sys
+import threading
 import PyQt5.QtWidgets as QtW
 from PyQt5.QtCore import Qt
 from formulario import Ui_MainWindow
@@ -22,7 +23,8 @@ class MyQMainWindow(QtW.QMainWindow):
         self.statusbar = self.uic.statusbar
         self.menu = self.uic.menuLista
         self.menu_lista = self.menu.addAction('Limpiar lista.')
-        self.menu_lista.triggered.connect(self.reset_lista)
+        # Hilo para función pesada.
+        self.menu_lista.triggered.connect(self.llamo_hilo)
         self.actualizar_grupos()
         self.__grupo_selec = None
         self.grupos.itemActivated.connect(self.mostrar_productos)
@@ -88,6 +90,11 @@ class MyQMainWindow(QtW.QMainWindow):
             for i in ids:
                 self.lst.cambiar_estado(grupo, i, 0)
         self.statusbar.showMessage('Se ha limpiado la lista.')
+
+    def llamo_hilo(self):
+        """ Crea hilo para llamar a self.reset_lista."""
+        mi_hilo = threading.Thread(target=self.reset_lista)
+        mi_hilo.start()
 
 
 if __name__ == '__main__':

@@ -36,22 +36,17 @@ class MyQMainWindow(QtW.QMainWindow):
             self.grupos.addItem(g)
 
     def celda_act(self, *vargs):
-        """Edita el estado o producto"""
+        """Edita producto."""
         fila, columna = vargs
         indice = self.productos.item(fila, 0)
         self.statusbar.showMessage(
             f'fila: {fila + 1}, Columna: {columna + 1}')
         if columna == 2:
-            estados = ['HAY', 'COMPRAR']
-            estado, ok = QtW.QInputDialog.getItem(
-                self, 'Editar estado',
-                'Introduce el nuevo estado',
-                estados)
-            print('Estado:', estado, 'OK:', ok)
-            if ok:
-                self.lst.cambiar_estado(self.__grupo_selec.text(),
-                                        indice.text(), str_to_bool(estado))
-                print('Id_producto: ', indice.text())
+            registro = self.lst.elemento(self.__grupo_selec.text(),
+                                         indice.text())
+            estado = not registro[2]
+            self.lst.cambiar_estado(self.__grupo_selec.text(),
+                                    indice.text(), estado)
 
         elif columna == 1:
             reg = self.lst.elemento(self.__grupo_selec.text(),

@@ -3,7 +3,7 @@ import PyQt5.QtWidgets as QtW
 from PyQt5.QtCore import Qt
 from formulario import Ui_MainWindow
 from bd_supermercado import ListaCompra
-from conversiones import str_to_bool, bool_to_str
+from conversiones import bool_to_str
 from dialogos import DialogoEditar
 
 URI_BASE = 'mysql+pymysql://supermercado:@netbook/supermercado'
@@ -15,8 +15,8 @@ class MyQMainWindow(QtW.QMainWindow):
     """
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.ui = Ui_MainWindow()
-        self.ui.setupUi(self)
+        self.uic = Ui_MainWindow()
+        self.uic.setupUi(self)
         self.grupos = self.ui.grupos
         self.productos = self.ui.productos
         self.statusbar = self.ui.statusbar
@@ -32,8 +32,8 @@ class MyQMainWindow(QtW.QMainWindow):
         """Lista los grupos"""
         self.lst = ListaCompra(URI_BASE)
         grupos = self.lst.grupos()
-        for g in grupos:
-            self.grupos.addItem(g)
+        for grupo in grupos:
+            self.grupos.addItem(grupo)
 
     def celda_act(self, *vargs):
         """Edita producto."""

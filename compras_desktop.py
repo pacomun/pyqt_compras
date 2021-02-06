@@ -17,10 +17,10 @@ class MyQMainWindow(QtW.QMainWindow):
         super().__init__(parent)
         self.uic = Ui_MainWindow()
         self.uic.setupUi(self)
-        self.grupos = self.ui.grupos
-        self.productos = self.ui.productos
-        self.statusbar = self.ui.statusbar
-        self.menu = self.ui.menuLista
+        self.grupos = self.uic.grupos
+        self.productos = self.uic.productos
+        self.statusbar = self.uic.statusbar
+        self.menu = self.uic.menuLista
         self.menu_lista = self.menu.addAction('Limpiar lista.')
         self.menu_lista.triggered.connect(self.reset_lista)
         self.actualizar_grupos()
@@ -68,10 +68,10 @@ class MyQMainWindow(QtW.QMainWindow):
         self.__grupo_selec = e
         elementos = self.lst.conseguir_elementos(e.text())
         self.productos.setRowCount(len(elementos))
-        for fila in range(len(elementos)):
-            indice = QtW.QTableWidgetItem(str(elementos[fila][0]))
-            product = QtW.QTableWidgetItem(str(elementos[fila][1]))
-            estado = QtW.QTableWidgetItem(bool_to_str(elementos[fila][2]))
+        for fila, elemento in enumerate(elementos):
+            indice = QtW.QTableWidgetItem(str(elemento[0]))
+            product = QtW.QTableWidgetItem(str(elemento[1]))
+            estado = QtW.QTableWidgetItem(bool_to_str(elemento[2]))
             indice.setTextAlignment(Qt.AlignRight)
             self.productos.setItem(fila, 0, indice)
             self.productos.setItem(fila, 1, product)

@@ -90,6 +90,7 @@ class MyQMainWindow(QtW.QMainWindow):
             for i in ids:
                 self.lst.cambiar_estado(grupo, i, 0)
         self.statusbar.showMessage('Se ha limpiado la lista.')
+        self.mostrar_productos(self.__grupo_selec)
 
     def llamo_hilo(self):
         """ Crea hilo para llamar a self.reset_lista."""

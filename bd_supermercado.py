@@ -5,7 +5,6 @@ from sqlalchemy import MetaData
 from sqlalchemy.exc import NoSuchTableError, OperationalError
 
 
-
 URI_BASE = 'mysql+pymysql://supermercado:@netbook/supermercado'
 
 
@@ -21,6 +20,8 @@ class ListaCompra():
         self.metadata = MetaData()
 
     def crear_grupo(self, grupo):
+        """Crea una tabla en la base de datos para alojar un grupo de
+        productos. El nombre de la tabla viene dado por 'grupo'."""
         try:
             grupo = Table(grupo, self.metadata,
                           Column('id', Integer, primary_key=True),
@@ -33,6 +34,7 @@ class ListaCompra():
             print(e)
 
     def insertar(self, grupo, producto, estado=0):
+        """ Inserta una nueva fila en la tabla 'grupo'."""
         try:
             grupo = Table(grupo, self.metadata, autoload=True,
                           autoload_with=self.engine)

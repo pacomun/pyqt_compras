@@ -2,12 +2,13 @@ import sys
 import threading
 import PyQt5.QtWidgets as QtW
 from PyQt5.QtCore import Qt
+from PyQt5.uic import loadUi
 from formulario import Ui_MainWindow
 from bd_supermercado import ListaCompra
 from conversiones import bool_to_str
 from dialogos import DialogoEditar, MyBarra
 
-URI_BASE = 'mysql+pymysql://supermercado:@netbook/supermercado'
+URI_BASE = 'sqlite:///supermercado.db'
 
 
 class MyQMainWindow(QtW.QMainWindow):
@@ -16,25 +17,33 @@ class MyQMainWindow(QtW.QMainWindow):
     """
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.uic = Ui_MainWindow()
-        self.uic.setupUi(self)
+        self.lst = ListaCompra(URI_BASE)
+        self.uic = loadUi('formulario.ui', self)
         self.grupos = self.uic.grupos
         self.productos = self.uic.productos
         self.statusbar = self.uic.statusbar
-        self.menu = self.uic.menuLista
         self.mi_barra = MyBarra(self)
-        self.menu_lista = self.menu.addAction('Limpiar lista.')
-        # Hilo para función pesada.
-        self.menu_lista.triggered.connect(self.llamo_hilo)
+        self.menu = self.uic.menubar
+        self.menu_limpiar_lista.triggered.connect(self.llamo_hilo)
+        self.menu_nuevo_grupo.triggered.connect(self.nuevo_grupo)
         self.actualizar_grupos()
         self.__grupo_selec = None
         self.grupos.itemActivated.connect(self.mostrar_productos)
         self.productos.cellDoubleClicked.connect(self.celda_act)
 
+    def nuevo_grupo(self):
+        grupo, valor = QtW.QInputDialog.getText(self,
+                                                'Nuevo Grupo',
+                                                'Nombre del grupo:')
+        if valor:
+            grupo = grupo.replace(' ', '') # Por si hay espacios.
+            self.lst.crear_grupo(grupo)
+            self.actualizar_grupos()
+
     def actualizar_grupos(self):
         """Lista los grupos"""
-        self.lst = ListaCompra(URI_BASE)
         grupos = self.lst.grupos()
+        self.grupos.clear()
         for grupo in grupos:
             self.grupos.addItem(grupo)
 

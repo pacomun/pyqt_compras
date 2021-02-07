@@ -130,12 +130,29 @@
     </property>
     <addaction name="menu_limpiar_lista"/>
    </widget>
+   <widget class="QMenu" name="menuGrupos">
+    <property name="title">
+     <string>Grupos</string>
+    </property>
+    <addaction name="menu_nuevo_grupo"/>
+   </widget>
    <addaction name="menuLista"/>
+   <addaction name="menuGrupos"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="menu_limpiar_lista">
    <property name="text">
     <string>Limpiar lista</string>
+   </property>
+  </action>
+  <action name="action">
+   <property name="text">
+    <string>Nuevo grupo</string>
+   </property>
+  </action>
+  <action name="menu_nuevo_grupo">
+   <property name="text">
+    <string>Nuevo grupo</string>
    </property>
   </action>
  </widget>

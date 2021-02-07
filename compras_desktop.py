@@ -22,6 +22,7 @@ class MyQMainWindow(QtW.QMainWindow):
         self.productos = self.uic.productos
         self.statusbar = self.uic.statusbar
         self.menu = self.uic.menuLista
+        self.mi_barra = MyBarra(self)
         self.menu_lista = self.menu.addAction('Limpiar lista.')
         # Hilo para función pesada.
         self.menu_lista.triggered.connect(self.llamo_hilo)
@@ -84,19 +85,20 @@ class MyQMainWindow(QtW.QMainWindow):
         """Cambia al estado 0 para todos los productos."""
         self.statusbar.showMessage(
             'Limpiado la lista de compra, espere...')
-        mi_barra = MyBarra()
-        mi_barra.show()
+        self.mi_barra.btn_aceptar.setEnabled(False)
+        self.mi_barra.show()
 
         grupos = self.lst.grupos()
         for i, grupo in enumerate(grupos):
             i += 1
             self.statusbar.showMessage(f'Limpiado {grupo}')
-            mi_barra.pbr_progreso.setValue(
+            self.mi_barra.pbr_progreso.setValue(
                 int((i / len(grupos) * 100)))
             ids = self.lst.conseguir_ids(grupo)
             for i in ids:
                 self.lst.cambiar_estado(grupo, i, 0)
         self.statusbar.showMessage('Se ha limpiado la lista.')
+        self.mi_barra.btn_aceptar.setEnabled(True)
 
     def llamo_hilo(self):
         """ Crea hilo para llamar a self.reset_lista."""

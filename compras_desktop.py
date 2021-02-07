@@ -29,14 +29,23 @@ class MyQMainWindow(QtW.QMainWindow):
         self.actualizar_grupos()
         self.__grupo_selec = None
         self.grupos.itemActivated.connect(self.mostrar_productos)
+        self.grupos.itemDoubleClicked.connect(self.nuevo_producto)
         self.productos.cellDoubleClicked.connect(self.celda_act)
+
+    def nuevo_producto(self):
+        product, valor = QtW.QInputDialog.getText(
+            self, "Nuevo Producto", 'Nombre del producto: ')
+        if valor:
+            self.lst.insertar(self.__grupo_selec.text(),
+                              product)
+            self.mostrar_productos(self.__grupo_selec)
 
     def nuevo_grupo(self):
         grupo, valor = QtW.QInputDialog.getText(self,
                                                 'Nuevo Grupo',
                                                 'Nombre del grupo:')
         if valor:
-            grupo = grupo.replace(' ', '') # Por si hay espacios.
+            grupo = grupo.replace(' ', '')  # Por si hay espacios.
             self.lst.crear_grupo(grupo)
             self.actualizar_grupos()
 
@@ -95,7 +104,7 @@ class MyQMainWindow(QtW.QMainWindow):
         self.statusbar.showMessage(
             'Limpiado la lista de compra, espere...')
         self.mi_barra.btn_aceptar.setEnabled(False)
-        self.mi_barra.show()
+        #  self.mi_barra.show()
 
         grupos = self.lst.grupos()
         for i, grupo in enumerate(grupos):

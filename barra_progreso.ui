@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>BarraProgreso</class>
+ <widget class="QDialog" name="BarraProgreso">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>640</width>
+    <height>229</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Restableciendo Lista</string>
+  </property>
+  <widget class="QLabel" name="etq_progreso">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>60</y>
+     <width>391</width>
+     <height>27</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>B&amp;H LucidaTypewriter</family>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>Restablecicendo toda la lista</string>
+   </property>
+  </widget>
+  <widget class="QProgressBar" name="pbr_progreso">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>128</y>
+     <width>531</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="value">
+    <number>24</number>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

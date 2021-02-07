@@ -1,6 +1,7 @@
 import sys
 import PyQt5.QtWidgets
 from conversiones import str_to_bool
+from PyQt5.uic import loadUi
 
 
 class DialogoEditar(PyQt5.QtWidgets.QDialog):
@@ -47,11 +48,24 @@ class DialogoEditar(PyQt5.QtWidgets.QDialog):
         self.accept()
 
 
+class MyBarra(PyQt5.QtWidgets.QDialog):
+    """Documentation for MyBarra
+    Classe para ventana dialogo con barra de progreso
+    """
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        loadUi('barra_progreso.ui', self)
+        self.setModal(True)
+        self.pbr_progreso.setValue(0)
+
 
 if __name__ == '__main__':
     Aplicacion = PyQt5.QtWidgets.QApplication(sys.argv)
     reg = [1, 'Algo', 0]
     mi_app = DialogoEditar(registro=reg, titulo='Edición de Registro')
     mi_app.show()
+    print(reg)    
+    mi_barra = MyBarra()
+    mi_barra.show()
+
     Aplicacion.exec_()
-    print(reg)

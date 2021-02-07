@@ -5,7 +5,7 @@ from PyQt5.QtCore import Qt
 from formulario import Ui_MainWindow
 from bd_supermercado import ListaCompra
 from conversiones import bool_to_str
-from dialogos import DialogoEditar
+from dialogos import DialogoEditar, MyBarra
 
 URI_BASE = 'mysql+pymysql://supermercado:@netbook/supermercado'
 
@@ -82,15 +82,21 @@ class MyQMainWindow(QtW.QMainWindow):
 
     def reset_lista(self):
         """Cambia al estado 0 para todos los productos."""
-        self.statusbar.showMessage('Limpiado la lista de compra, espere...')
+        self.statusbar.showMessage(
+            'Limpiado la lista de compra, espere...')
+        mi_barra = MyBarra()
+        mi_barra.show()
+
         grupos = self.lst.grupos()
-        for grupo in grupos:
+        for i, grupo in enumerate(grupos):
+            i += 1
             self.statusbar.showMessage(f'Limpiado {grupo}')
+            mi_barra.pbr_progreso.setValue(
+                int((i / len(grupos) * 100)))
             ids = self.lst.conseguir_ids(grupo)
             for i in ids:
                 self.lst.cambiar_estado(grupo, i, 0)
         self.statusbar.showMessage('Se ha limpiado la lista.')
-        self.mostrar_productos(self.__grupo_selec)
 
     def llamo_hilo(self):
         """ Crea hilo para llamar a self.reset_lista."""

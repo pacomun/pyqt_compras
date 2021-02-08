@@ -8,8 +8,7 @@ from conversiones import bool_to_str
 from dialogos import DialogoEditar, DialogoNuevo
 from barra_progreso import DialogoBarra, HiloObjeto
 
-URI_BASE = 'sqlite:///supermercado.db'
-
+URI_BASE = 'mysql+pymysql://supermercado:@netbook/supermercado'
 
 class MyQMainWindow(QtW.QMainWindow):
     """Primer acercamiento a la aplicación de escritorio para lista de

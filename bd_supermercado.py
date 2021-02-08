@@ -5,8 +5,7 @@ from sqlalchemy import MetaData
 from sqlalchemy.exc import NoSuchTableError, OperationalError
 
 
-URI_BASE = 'sqlite:///supermercado.db'
-
+URI_BASE = 'mysql+pymysql://supermercado:@netbook/supermercado'
 
 class ListaCompra():
     """Documentation for ListaCompra

@@ -58,6 +58,23 @@ class MyBarra(PyQt5.QtWidgets.QDialog):
         self.setModal(True)
         self.pbr_progreso.setValue(0)
 
+class DialogoNuevo(PyQt5.QtWidgets.QDialog):
+    """ Documentar...
+    """
+    def __init__(self, parent=None, lista=[]):
+        super().__init__(parent)
+        self.lista = lista
+        self.uic = loadUi('nuevo_producto.ui', self)
+        self.uic.dialogButtonBox.accepted.connect(self.accept)
+        self.uic.comboBox.addItems(self.lista[0])
+
+    def accept(self):
+        self.lista.clear()
+        self.lista.append(self.uic.comboBox.currentText())
+        self.lista.append(self.uic.input_producto.text())
+        self.lista.append(self.uic.checkBox.isChecked())
+        super().accept()
+
 
 if __name__ == '__main__':
     Aplicacion = PyQt5.QtWidgets.QApplication(sys.argv)

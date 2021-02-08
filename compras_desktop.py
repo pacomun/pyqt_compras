@@ -3,10 +3,10 @@ import threading
 import PyQt5.QtWidgets as QtW
 from PyQt5.QtCore import Qt
 from PyQt5.uic import loadUi
-from formulario import Ui_MainWindow
 from bd_supermercado import ListaCompra
 from conversiones import bool_to_str
-from dialogos import DialogoEditar, MyBarra
+from dialogos import DialogoEditar, DialogoNuevo
+from barra_progreso import DialogoBarra, HiloObjeto
 
 URI_BASE = 'sqlite:///supermercado.db'
 
@@ -17,28 +17,40 @@ class MyQMainWindow(QtW.QMainWindow):
     """
     def __init__(self, parent=None):
         super().__init__(parent)
+        # Conexión con la base de datos.
         self.lst = ListaCompra(URI_BASE)
+
+        # Llamada a formulario principal y renombrado de widget
         self.uic = loadUi('formulario.ui', self)
         self.grupos = self.uic.grupos
         self.productos = self.uic.productos
         self.statusbar = self.uic.statusbar
-        self.mi_barra = MyBarra(self)
+
+        # Menú
         self.menu = self.uic.menubar
-        self.menu_limpiar_lista.triggered.connect(self.llamo_hilo)
+        self.menu_limpiar_lista.triggered.connect(self.reset_lista)
         self.menu_nuevo_grupo.triggered.connect(self.nuevo_grupo)
+
+        # Inicio lista de grupos y conecto slots
         self.actualizar_grupos()
         self.__grupo_selec = None
         self.grupos.itemActivated.connect(self.mostrar_productos)
         self.grupos.itemDoubleClicked.connect(self.nuevo_producto)
         self.productos.cellDoubleClicked.connect(self.celda_act)
 
+        # Instancio Dialogo para barra de progreso.
+        self.bpr = DialogoBarra()
+
+
     def nuevo_producto(self):
-        product, valor = QtW.QInputDialog.getText(
-            self, "Nuevo Producto", 'Nombre del producto: ')
-        if valor:
-            self.lst.insertar(self.__grupo_selec.text(),
-                              product)
-            self.mostrar_productos(self.__grupo_selec)
+        """Método para entrada de un nuevo producto."""
+        datos_entrada  = []
+        datos_entrada.append(self.lst.grupos())
+        datos_entrada.append(self.__grupo_selec.text())
+        dlg_nuevo = DialogoNuevo(self, datos_entrada)
+        if dlg_nuevo.exec_() == QtW.QDialog.Accepted:
+            self.lst.insertar(*datos_entrada)
+        self.mostrar_productos(self.__grupo_selec)
 
     def nuevo_grupo(self):
         grupo, valor = QtW.QInputDialog.getText(self,
@@ -100,28 +112,14 @@ class MyQMainWindow(QtW.QMainWindow):
             self.productos.setItem(fila, 2, estado)
 
     def reset_lista(self):
-        """Cambia al estado 0 para todos los productos."""
-        self.statusbar.showMessage(
-            'Limpiado la lista de compra, espere...')
-        self.mi_barra.btn_aceptar.setEnabled(False)
-        #  self.mi_barra.show()
+        hilo = HiloObjeto(self.lst, self)
+        self.bpr.bpr.setValue(0)
+        hilo.senal.connect(self.bpr.bpr.setValue)
+        self.bpr.show()
+        hilo.start()
 
-        grupos = self.lst.grupos()
-        for i, grupo in enumerate(grupos):
-            i += 1
-            self.statusbar.showMessage(f'Limpiado {grupo}')
-            self.mi_barra.pbr_progreso.setValue(
-                int((i / len(grupos) * 100)))
-            ids = self.lst.conseguir_ids(grupo)
-            for i in ids:
-                self.lst.cambiar_estado(grupo, i, 0)
-        self.statusbar.showMessage('Se ha limpiado la lista.')
-        self.mi_barra.btn_aceptar.setEnabled(True)
-
-    def llamo_hilo(self):
-        """ Crea hilo para llamar a self.reset_lista."""
-        mi_hilo = threading.Thread(target=self.reset_lista)
-        mi_hilo.start()
+        if self.__grupo_selec:
+            self.mostrar_productos(self.__grupo_selec)
 
 
 if __name__ == '__main__':

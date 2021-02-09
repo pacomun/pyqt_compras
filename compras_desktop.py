@@ -111,7 +111,7 @@ class MyQMainWindow(QtW.QMainWindow):
             self.productos.setItem(fila, 2, estado)
 
     def reset_lista(self):
-        hilo = HiloObjeto(self.lst, self)
+        hilo = HiloObjeto(self)
         self.bpr.bpr.setValue(0)
         hilo.senal.connect(self.bpr.bpr.setValue)
         self.bpr.show()

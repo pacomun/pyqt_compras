@@ -7,6 +7,9 @@ import threading
 import time
 from bd_supermercado import ListaCompra
 
+URI_BASE = 'mysql+pymysql://supermercado:@netbook/supermercado'
+
+
 class Ventana(PyQt5.QtWidgets.QDialog):
     """ Una simple ventana con un botón.
 
@@ -39,10 +42,10 @@ class HiloObjeto(threading.Thread, PyQt5.QtCore.QObject):
 
     senal = PyQt5.QtCore.pyqtSignal(int)
 
-    def __init__(self,lst, parent=None):
+    def __init__(self,parent=None):
         threading.Thread.__init__(self)
         PyQt5.QtCore.QObject.__init__(self, parent)
-        self.lst = lst
+        self.lst = ListaCompra(URI_BASE)
 
     def run(self):
         """Cambia al estado 0 para todos los productos."""

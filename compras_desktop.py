@@ -111,9 +111,10 @@ class MyQMainWindow(QtW.QMainWindow):
             self.productos.setItem(fila, 2, estado)
 
     def reset_lista(self):
+        """ Pone todos los estados de los productos en 0."""
         hilo = HiloObjeto(self)
         self.bpr.bpr.setValue(0)
-        hilo.senal.connect(self.bpr.bpr.setValue)
+        hilo.senal.connect(self.bpr.slot_progreso)
         self.bpr.show()
         hilo.start()
 

@@ -40,7 +40,7 @@ class HiloObjeto(threading.Thread, PyQt5.QtCore.QObject):
 
     """
 
-    senal = PyQt5.QtCore.pyqtSignal(int)
+    senal = PyQt5.QtCore.pyqtSignal(int, str)
 
     def __init__(self,parent=None):
         threading.Thread.__init__(self)
@@ -53,7 +53,7 @@ class HiloObjeto(threading.Thread, PyQt5.QtCore.QObject):
         for i, grupo in enumerate(grupos):
             i += 1
             self.senal.emit(
-                int((i / len(grupos) * 100)))
+                int((i / len(grupos) * 100)), grupo)
             ids = self.lst.conseguir_ids(grupo)
             for j in ids:
                 self.lst.cambiar_estado(grupo, j, 0)
@@ -68,6 +68,15 @@ class DialogoBarra(PyQt5.QtWidgets.QDialog):
         self.uic = PyQt5.uic.loadUi('barra_progreso.ui', self)
         self.bpr = self.uic.pbr_progreso
         self.uic.setModal(True)
+
+    def slot_progreso(self, entero, cadena):
+        self.uic.etq_grupo.setText(
+            'Limpiando el grupo {}'.format(cadena)
+        )
+        self.uic.bpr.setValue(entero)
+        if entero == 100:
+            self.accept()
+
 
 
 if __name__ == '__main__':

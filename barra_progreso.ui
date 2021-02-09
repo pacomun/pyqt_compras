@@ -16,8 +16,8 @@
   <widget class="QWidget" name="verticalLayoutWidget">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>30</y>
+     <x>30</x>
+     <y>60</y>
      <width>591</width>
      <height>121</height>
     </rect>
@@ -50,72 +50,16 @@
       </property>
      </widget>
     </item>
+    <item>
+     <widget class="QLabel" name="etq_grupo">
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+    </item>
    </layout>
-  </widget>
-  <widget class="QPushButton" name="btn_aceptar">
-   <property name="enabled">
-    <bool>true</bool>
-   </property>
-   <property name="geometry">
-    <rect>
-     <x>240</x>
-     <y>160</y>
-     <width>111</width>
-     <height>43</height>
-    </rect>
-   </property>
-   <property name="sizePolicy">
-    <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-     <horstretch>0</horstretch>
-     <verstretch>0</verstretch>
-    </sizepolicy>
-   </property>
-   <property name="minimumSize">
-    <size>
-     <width>0</width>
-     <height>0</height>
-    </size>
-   </property>
-   <property name="maximumSize">
-    <size>
-     <width>16777215</width>
-     <height>16777215</height>
-    </size>
-   </property>
-   <property name="sizeIncrement">
-    <size>
-     <width>0</width>
-     <height>0</height>
-    </size>
-   </property>
-   <property name="layoutDirection">
-    <enum>Qt::LeftToRight</enum>
-   </property>
-   <property name="autoFillBackground">
-    <bool>false</bool>
-   </property>
-   <property name="text">
-    <string>Acepta</string>
-   </property>
   </widget>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>btn_aceptar</sender>
-   <signal>clicked()</signal>
-   <receiver>BarraProgreso</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>275</x>
-     <y>182</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>186</x>
-     <y>171</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

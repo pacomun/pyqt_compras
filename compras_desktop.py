@@ -10,6 +10,7 @@ from barra_progreso import DialogoBarra, HiloObjeto
 
 URI_BASE = 'mysql+pymysql://supermercado:@netbook/supermercado'
 
+
 class MyQMainWindow(QtW.QMainWindow):
     """Primer acercamiento a la aplicación de escritorio para lista de
     compras en supermerdado.
@@ -33,17 +34,16 @@ class MyQMainWindow(QtW.QMainWindow):
         # Inicio lista de grupos y conecto slots
         self.actualizar_grupos()
         self.__grupo_selec = None
-        self.grupos.itemActivated.connect(self.mostrar_productos)
+        self.grupos.itemClicked.connect(self.mostrar_productos)
         self.grupos.itemDoubleClicked.connect(self.nuevo_producto)
         self.productos.cellDoubleClicked.connect(self.celda_act)
 
         # Instancio Dialogo para barra de progreso.
         self.bpr = DialogoBarra()
 
-
     def nuevo_producto(self):
         """Método para entrada de un nuevo producto."""
-        datos_entrada  = []
+        datos_entrada = []
         datos_entrada.append(self.lst.grupos())
         datos_entrada.append(self.__grupo_selec.text())
         dlg_nuevo = DialogoNuevo(self, datos_entrada)

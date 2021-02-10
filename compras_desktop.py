@@ -1,5 +1,6 @@
 import sys
 import threading
+import PyQt5.QtGui as QtGui
 import PyQt5.QtWidgets as QtW
 from PyQt5.QtCore import Qt
 from PyQt5.uic import loadUi
@@ -30,6 +31,7 @@ class MyQMainWindow(QtW.QMainWindow):
         self.menu = self.uic.menubar
         self.menu_limpiar_lista.triggered.connect(self.reset_lista)
         self.menu_nuevo_grupo.triggered.connect(self.nuevo_grupo)
+        self.menu_borrar_grupo.triggered.connect(self.borrar_grupo)
 
         # Inicio lista de grupos y conecto slots
         self.actualizar_grupos()
@@ -41,6 +43,22 @@ class MyQMainWindow(QtW.QMainWindow):
         # Instancio Dialogo para barra de progreso.
         self.bpr = DialogoBarra()
 
+    def borrar_grupo(self):
+        if self.__grupo_selec:
+            grupo_seleccionado = self.__grupo_selec.text()
+        else:
+            self.statusbar.showMessage('No se ha seleccionado ningún grupo.')
+            return
+        mensaje = '¿Quieres borrar el grupo {}'.format(grupo_seleccionado)
+        respuesta = QtW.QMessageBox()
+        respuesta.setIcon(QtW.QMessageBox.Question)
+        respuesta.setWindowTitle('Borrar Grupo Seleccionado')
+        respuesta.setInformativeText(mensaje)
+        respuesta.setStandardButtons(QtW.QMessageBox.Yes | QtW.QMessageBox.No)
+        if QtW.QMessageBox.Yes == respuesta.exec():
+            print('Se borrará el grupo')    
+     
+        
     def nuevo_producto(self):
         """Método para entrada de un nuevo producto."""
         datos_entrada = []

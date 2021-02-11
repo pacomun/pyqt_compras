@@ -2,13 +2,16 @@ from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import Column, Integer, String, Table
 from sqlalchemy import MetaData
-from sqlalchemy.exc import NoSuchTableError, OperationalError
+from sqlalchemy.exc import NoSuchTableError
 
 
 URI_BASE = 'mysql+pymysql://supermercado:@netbook/supermercado'
 
+
 class ListaCompra():
-    """Documentation for ListaCompra
+    """Crea un objeto conexión SQLAlchemy a una base de datos. Tiene como métodos:
+    crear_grupo(grupo):->None
+    insertar(grupo, producto, estado=0)->None
 
     """
     def __init__(self, base=URI_BASE):
@@ -103,9 +106,8 @@ class ListaCompra():
         self.engine.execute(actualizar)
 
 
-
 if __name__ == '__main__':
-    conn = ListaCompra()
+    conn = ListaCompra('sqlite:///:memory')
     print('Se produce la conexión a la base de datos...')
     print('Valor de "conn": ', conn)
     conn.crear_grupo('aseo_personal')

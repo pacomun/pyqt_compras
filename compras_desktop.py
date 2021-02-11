@@ -63,7 +63,6 @@ class MyQMainWindow(QtW.QMainWindow):
         confirmación."""
         if self.__grupo_selec:
             grupo_seleccionado = self.__grupo_selec.text()
-            self.mostrar_productos(self.__grupo_selec)
         else:
             self.statusbar.showMessage(
                 'No se ha seleccionado ningún grupo.')
@@ -82,13 +81,13 @@ class MyQMainWindow(QtW.QMainWindow):
             self.statusbar.showMessage(
                 'Se ha borrado el grupo {}'.format(grupo_seleccionado))
             self.__grupo_selec = None
+            self.actualizar_grupos()
             self.mostrar_productos(self.__grupo_selec)
 
     def nuevo_producto(self):
         """Método para entrada de un nuevo producto."""
         datos_entrada = []
         datos_entrada.append(self.lst.grupos())
-        datos_entrada.append(self.__grupo_selec.text())
         dlg_nuevo = DialogoNuevo(self, datos_entrada)
         if dlg_nuevo.exec_() == QtW.QDialog.Accepted:
             self.lst.insertar(*datos_entrada)

@@ -138,7 +138,7 @@ class MyQMainWindow(QtW.QMainWindow):
 
         if self.__grupo_selec:
             self.mostrar_productos(self.__grupo_selec)
-        self.statusbar.showMessage('Se restablecido la lista.')
+        self.statusbar.showMessage('Se ha restablecido la lista.')
 
 
 if __name__ == '__main__':

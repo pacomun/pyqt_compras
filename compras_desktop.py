@@ -43,6 +43,19 @@ class MyQMainWindow(QtW.QMainWindow):
         # Instancio Dialogo para barra de progreso.
         self.bpr = DialogoBarra()
 
+        # Centro la ventana principal.
+        self.centrar_ventana()
+
+    def centrar_ventana(self):
+        """Centra la ventana en el escritorio."""
+        disponible = QtW.QDesktopWidget().availableGeometry()
+        ventana = self.geometry()
+        print('Dimesiones disponibles: ', disponible)
+        print('Dimesiones de la Ventana: ', ventana)
+        self.move(
+            int((disponible.width() - ventana.width()) / 2),
+            int((disponible.height() - ventana.height()) / 2))
+
     def borrar_grupo(self):
         """Borra la tabla seleccionada. Muestra mensaje de
         confirmación."""

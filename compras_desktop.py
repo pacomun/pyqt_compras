@@ -32,6 +32,8 @@ class MyQMainWindow(QtW.QMainWindow):
         self.menu_limpiar_lista.triggered.connect(self.reset_lista)
         self.menu_nuevo_grupo.triggered.connect(self.nuevo_grupo)
         self.menu_borrar_grupo.triggered.connect(self.borrar_grupo)
+        self.menu_nuevo_producto.triggered.connect(self.nuevo_producto)
+        self.menu_borrar_producto.triggered.connect(self.borrar_producto)
 
         # Inicio lista de grupos y conecto slots
         self.actualizar_grupos()
@@ -168,6 +170,16 @@ class MyQMainWindow(QtW.QMainWindow):
         if self.__grupo_selec:
             self.mostrar_productos(self.__grupo_selec)
         self.statusbar.showMessage('Se ha restablecido la lista.')
+
+    def borrar_producto(self):
+        """Borra un elemento de un grupo."""
+        if self.__grupo_selec is not None:
+            grupo = self.__grupo_selec.text()
+            if self.productos.currentRow() >= 0:
+                celda = self.productos.item(
+                    int(self.productos.currentRow()), 0)
+                self.lst.borrar_elemento(grupo, int(celda.text()))
+                self.mostrar_productos(self.__grupo_selec)
 
 
 if __name__ == '__main__':

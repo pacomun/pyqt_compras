@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1341</width>
+    <width>1373</width>
     <height>805</height>
    </rect>
   </property>
@@ -17,9 +17,9 @@
    <widget class="QWidget" name="horizontalLayoutWidget_2">
     <property name="geometry">
      <rect>
-      <x>50</x>
+      <x>10</x>
       <y>50</y>
-      <width>1291</width>
+      <width>1351</width>
       <height>781</height>
      </rect>
     </property>
@@ -120,8 +120,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1341</width>
-     <height>26</height>
+     <width>1373</width>
+     <height>39</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuLista">
@@ -137,8 +137,16 @@
     <addaction name="menu_nuevo_grupo"/>
     <addaction name="menu_borrar_grupo"/>
    </widget>
+   <widget class="QMenu" name="menuProductos">
+    <property name="title">
+     <string>Productos</string>
+    </property>
+    <addaction name="menu_nuevo_producto"/>
+    <addaction name="menu_borrar_producto"/>
+   </widget>
    <addaction name="menuLista"/>
    <addaction name="menuGrupos"/>
+   <addaction name="menuProductos"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="menu_limpiar_lista">
@@ -159,6 +167,26 @@
   <action name="menu_borrar_grupo">
    <property name="text">
     <string>Borrar grupo</string>
+   </property>
+  </action>
+  <action name="actionA_adir_Nuevo">
+   <property name="text">
+    <string>Añadir Nuevo</string>
+   </property>
+  </action>
+  <action name="actionBorrar_Producto">
+   <property name="text">
+    <string>Borrar Producto</string>
+   </property>
+  </action>
+  <action name="menu_nuevo_producto">
+   <property name="text">
+    <string>Nuevo producto</string>
+   </property>
+  </action>
+  <action name="menu_borrar_producto">
+   <property name="text">
+    <string>Borrar producto</string>
    </property>
   </action>
  </widget>

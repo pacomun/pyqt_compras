@@ -44,21 +44,31 @@ class MyQMainWindow(QtW.QMainWindow):
         self.bpr = DialogoBarra()
 
     def borrar_grupo(self):
+        """Borra la tabla seleccionada. Muestra mensaje de
+        confirmación."""
         if self.__grupo_selec:
             grupo_seleccionado = self.__grupo_selec.text()
+            self.mostrar_productos(self.__grupo_selec)
         else:
-            self.statusbar.showMessage('No se ha seleccionado ningún grupo.')
+            self.statusbar.showMessage(
+                'No se ha seleccionado ningún grupo.')
             return
-        mensaje = '¿Quieres borrar el grupo {}'.format(grupo_seleccionado)
+        # Construir ventana de confirmación.
+        mensaje = '¿Quieres borrar el grupo {}'.format(
+            grupo_seleccionado)
         respuesta = QtW.QMessageBox()
         respuesta.setIcon(QtW.QMessageBox.Question)
         respuesta.setWindowTitle('Borrar Grupo Seleccionado')
         respuesta.setInformativeText(mensaje)
-        respuesta.setStandardButtons(QtW.QMessageBox.Yes | QtW.QMessageBox.No)
+        respuesta.setStandardButtons(
+            QtW.QMessageBox.Yes | QtW.QMessageBox.No)
         if QtW.QMessageBox.Yes == respuesta.exec():
-            print('Se borrará el grupo')    
-     
-        
+            self.lst.borrar_grupo(grupo_seleccionado)
+            self.statusbar.showMessage(
+                'Se ha borrado el grupo {}'.format(grupo_seleccionado))
+            self.__grupo_selec = None
+            self.mostrar_productos(self.__grupo_selec)
+
     def nuevo_producto(self):
         """Método para entrada de un nuevo producto."""
         datos_entrada = []
@@ -113,10 +123,16 @@ class MyQMainWindow(QtW.QMainWindow):
                     self.__grupo_selec.text(), registro)
         self.mostrar_productos(self.__grupo_selec)
 
-    def mostrar_productos(self, e):
-        """Carga la tabla con el grupo escepecificado en 'e'"""
-        self.__grupo_selec = e
-        elementos = self.lst.conseguir_elementos(e.text())
+    def limpiar_tabla(self):
+        self.productos.setRowCount(0)
+
+    def mostrar_productos(self, elec):
+        """Carga la tabla con el grupo escepecificado en 'elec'"""
+        self.__grupo_selec = elec
+        if self.__grupo_selec is None:
+            self.limpiar_tabla()
+            return
+        elementos = self.lst.conseguir_elementos(elec.text())
         self.productos.setRowCount(len(elementos))
         for fila, elemento in enumerate(elementos):
             indice = QtW.QTableWidgetItem(str(elemento[0]))

@@ -1,22 +1,30 @@
-from sqlalchemy import create_engine, text
+"""Módulo que simplifica la gestion de una base de datos para guardar
+los distintos grupos y elementos de una lista para la compra.
+
+Según definamos la variable URI_BASE, nos conectaremos a un tipo de
+base de datos u otro.
+
+"""
+import re
+from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import Column, Integer, String, Table
 from sqlalchemy import MetaData
 from sqlalchemy.exc import NoSuchTableError
 
 
-URI_BASE = 'mysql+pymysql://supermercado:@netbook/supermercado'
+# URI_BASE = 'mysql+pymysql://supermercado:@netbook/supermercado'
+URI_BASE = 'sqlite:///:memory:'
 
 
 class ListaCompra():
-    """Crea un objeto conexión SQLAlchemy a una base de datos. Tiene como métodos:
-    crear_grupo(grupo):->None
-    insertar(grupo, producto, estado=0)->None
+    """Crea un objeto conexión SQLAlchemy a una base de datos y con sus
+    métodos podemos gestionar la base de datos.
 
     """
     def __init__(self, base=URI_BASE):
         self.base = base
-        self.engine = create_engine(URI_BASE, echo=False)
+        self.engine = create_engine(self.base, echo=False)
         Session = sessionmaker(bind=self.engine)
         self.session = Session()
         self.metadata = MetaData()
@@ -46,10 +54,12 @@ class ListaCompra():
             print(e)
 
     def grupos(self):
+        """Devuelve una lista con las tablas de la BD."""
         self.metadata.reflect(self.engine)
         return list(self.metadata.tables.keys())
 
     def borrar_grupo(self, grupo):
+        """Borra una tabla de la BD."""
         try:
             grupo = self.__carga_tabla(grupo)
         except NoSuchTableError:
@@ -58,6 +68,7 @@ class ListaCompra():
             self.metadata.drop_all(tables=(grupo,), bind=self.engine)
 
     def conseguir_elementos(self, grupo):
+        """Devuevle lista con elementos de una tabla de la BD."""
         tabla = self.__carga_tabla(grupo)
         salida = []
         for consulta in self.session.query(tabla).order_by(tabla.c.product):
@@ -81,11 +92,12 @@ class ListaCompra():
         self.engine.execute(actualizar)
 
     def __carga_tabla(self, tabla):
+        """Retorna objeto tabla leida del servidor."""
         return Table(tabla, self.metadata, autoload=True,
                      autoload_with=self.engine)
 
     def borrar_elemento(self, grupo, indice):
-        """Borra un elemento dado de su grupo (table) e índice"""
+        """Borra un elemento dado de su grupo (tabla) e índice"""
         tabla = self.__carga_tabla(grupo)
         borrado = tabla.delete().where(tabla.c.id == indice)
         self.engine.execute(borrado)
@@ -98,12 +110,31 @@ class ListaCompra():
         return consulta
 
     def actualizar_registro(self, grupo,  registro):
+        """Actualiza el registro en la tabla 'grupo'"""
         tabla = self.__carga_tabla(grupo )
         actualizar = tabla.update().where(
             tabla.c.id == registro[0]
         ).values(product=registro[1],
                  estado=registro[2])
         self.engine.execute(actualizar)
+
+    def buscar_registro(self, cadena):
+        """Busca cadena en productos de todos los grupos."""
+        try:
+            exp_regular = re.compile(cadena)
+        except re.error as error:
+            print(error)
+            return False
+        tablas = self.grupos()
+        for tabla in tablas:
+            elementos = self.conseguir_elementos(tabla)
+            for elemento in elementos:
+                indice, producto, estado = elemento
+                if exp_regular.search(cadena):
+                    print(tabla, indice, producto, estado)
+                    return True
+        print('No se han encontrado coincidencias.')
+        return False
 
 
 if __name__ == '__main__':
@@ -126,8 +157,11 @@ if __name__ == '__main__':
         print(i)
     conn.cambiar_estado('congelados', 1, 0)
     salida = conn.conseguir_elementos('congelados')
-    print('conn.conseguir_elementos("congelados")',salida)
+    print('conn.conseguir_elementos("congelados")', salida)
     print("conn.elemento('aseo_personal', 1): ",
           conn.elemento('aseo_personal', 1))
+    print('Buscamos en BD Pasta: ')
+    print(conn.buscar_registro('guisantes'))
+    print(conn.buscar_registro('*'))
     conn.borrar_grupo('aseo_personal')
     conn.borrar_grupo('congelados')

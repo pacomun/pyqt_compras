@@ -120,25 +120,26 @@ class ListaCompra():
 
     def buscar_registro(self, cadena):
         """Busca cadena en productos de todos los grupos."""
+        salida = []
+        grupo_filtrados = []
         try:
-            exp_regular = re.compile(cadena)
+            exp_regular = re.compile(cadena, re.IGNORECASE)
         except re.error as error:
             print(error)
             return False
         tablas = self.grupos()
         for tabla in tablas:
             elementos = self.conseguir_elementos(tabla)
+            grupo_filtrados.append(tabla)
             for elemento in elementos:
                 indice, producto, estado = elemento
-                if exp_regular.search(cadena):
-                    print(tabla, indice, producto, estado)
-                    return True
-        print('No se han encontrado coincidencias.')
-        return False
+                if exp_regular.search(producto):
+                    salida.append((tabla, indice, producto, estado))
+        return [salida, grupo_filtrados]
 
 
 if __name__ == '__main__':
-    conn = ListaCompra('sqlite:///:memory')
+    conn = ListaCompra('sqlite:///:memory:')
     print('Se produce la conexión a la base de datos...')
     print('Valor de "conn": ', conn)
     conn.crear_grupo('aseo_personal')

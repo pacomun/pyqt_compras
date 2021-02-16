@@ -35,6 +35,9 @@ class MyQMainWindow(QtW.QMainWindow):
         self.menu_nuevo_producto.triggered.connect(self.nuevo_producto)
         self.menu_borrar_producto.triggered.connect(self.borrar_producto)
 
+        # Conecto botón de búsqueda
+        self.btn_buscar.clicked.connect(self.buscar_registro)
+
         # Inicio lista de grupos y conecto slots
         self.actualizar_grupos()
         self.__grupo_selec = None
@@ -91,7 +94,7 @@ class MyQMainWindow(QtW.QMainWindow):
         dlg_nuevo = DialogoNuevo(self, datos_entrada)
         if dlg_nuevo.exec_() == QtW.QDialog.Accepted:
             self.lst.insertar(*datos_entrada)
-        self.mostrar_productos(self.__grupo_selec)
+            self.mostrar_productos(self.__grupo_selec)
 
     def nuevo_grupo(self):
         grupo, valor = QtW.QInputDialog.getText(self,
@@ -102,9 +105,12 @@ class MyQMainWindow(QtW.QMainWindow):
             self.lst.crear_grupo(grupo)
             self.actualizar_grupos()
 
-    def actualizar_grupos(self):
+    def actualizar_grupos(self, lst_grupos=None):
         """Lista los grupos"""
-        grupos = self.lst.grupos()
+        if lst_grupos:
+            grupos = lst_grupos
+        else:
+            grupos = self.lst.grupos()
         self.grupos.clear()
         for grupo in grupos:
             self.grupos.addItem(grupo)
@@ -179,6 +185,27 @@ class MyQMainWindow(QtW.QMainWindow):
                     int(self.productos.currentRow()), 0)
                 self.lst.borrar_elemento(grupo, int(celda.text()))
                 self.mostrar_productos(self.__grupo_selec)
+
+    def buscar_registro(self):
+        cadena = self.input_buscar.text()
+        self.limpiar_tabla()
+        coincidencias, grupos = self.lst.buscar_registro(cadena)
+        self.actualizar_grupos(grupos)
+        grupo = QtW.QListWidgetItem(coincidencias[0][0])
+        self.__grupo_selec = grupo
+        self.grupos.addItem(grupo)
+        print(coincidencias)
+        if coincidencias:
+            self.productos.setRowCount(len(coincidencias))
+            for fila, elemento in enumerate(coincidencias):
+                if elemento[0] == grupo.text():
+                    indice = QtW.QTableWidgetItem(str(elemento[1]))
+                    producto = QtW.QTableWidgetItem(elemento[2])
+                    estado = QtW.QTableWidgetItem(bool_to_str(elemento[3]))
+                    self.productos.setItem(fila, 0, indice)
+                    self.productos.setItem(fila, 1, producto)
+                    estado.setTextAlignment(Qt.AlignHCenter)
+                    self.productos.setItem(fila, 2, estado)
 
 
 if __name__ == '__main__':

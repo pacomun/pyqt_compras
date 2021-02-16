@@ -11,7 +11,7 @@ URI_BASE = 'mysql+pymysql://supermercado:@netbook/supermercado'
 
 
 class Ventana(PyQt5.QtWidgets.QDialog):
-    """ Una simple ventana con un botón.
+    """ Ventana de dialog con barra de progreso
 
     """
     def __init__(self):

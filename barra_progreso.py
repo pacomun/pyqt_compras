@@ -41,6 +41,7 @@ class HiloObjeto(threading.Thread, PyQt5.QtCore.QObject):
     """
 
     senal = PyQt5.QtCore.pyqtSignal(int, str)
+    final = PyQt5.QtCore.pyqtSignal(int)
 
     def __init__(self,parent=None):
         threading.Thread.__init__(self)
@@ -57,6 +58,7 @@ class HiloObjeto(threading.Thread, PyQt5.QtCore.QObject):
             ids = self.lst.conseguir_ids(grupo)
             for j in ids:
                 self.lst.cambiar_estado(grupo, j, 0)
+        self.final.emit(1)
 
 
 class DialogoBarra(PyQt5.QtWidgets.QDialog):

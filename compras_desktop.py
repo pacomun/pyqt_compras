@@ -169,12 +169,13 @@ class MyQMainWindow(QtW.QMainWindow):
         hilo = HiloObjeto(self)
         self.bpr.bpr.setValue(0)
         hilo.senal.connect(self.bpr.slot_progreso)
+        hilo.final.connect(self.actualizar)
         self.bpr.show()
         hilo.start()
 
-        if self.__grupo_selec:
-            self.mostrar_productos(self.__grupo_selec)
-        self.statusbar.showMessage('Se ha restablecido la lista.')
+    def actualizar(self):
+        self.mostrar_productos(self.__grupo_selec)
+        self.statusbar.showMessage('La tabla se ha limpiado.')
 
     def borrar_producto(self):
         """Borra un elemento de un grupo."""

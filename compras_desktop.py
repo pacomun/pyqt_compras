@@ -44,6 +44,7 @@ class MyQMainWindow(QtW.QMainWindow):
         self.grupos.itemClicked.connect(self.mostrar_productos)
         self.grupos.itemDoubleClicked.connect(self.nuevo_producto)
         self.productos.cellDoubleClicked.connect(self.celda_act)
+        self.input_buscar.returnPressed.connect(self.buscar_registro)
 
         # Instancio Dialogo para barra de progreso.
         self.bpr = DialogoBarra()

@@ -197,7 +197,6 @@ class MyQMainWindow(QtW.QMainWindow):
             return
         grupo = QtW.QListWidgetItem(coincidencias[0][0])
         self.__grupo_selec = grupo
-        self.grupos.addItem(grupo)
         if coincidencias:
             self.productos.setRowCount(len(coincidencias))
             for fila, elemento in enumerate(coincidencias):

@@ -189,21 +189,23 @@ class MyQMainWindow(QtW.QMainWindow):
                 self.mostrar_productos(self.__grupo_selec)
 
     def buscar_registro(self):
-        cadena = self.input_buscar.text()
+        """Muestra en tabla los resultados de la búsqueda de producto."""
         self.limpiar_tabla()
-        coincidencias, grupos = self.lst.buscar_registro(cadena)
-        self.actualizar_grupos(grupos)
+        cadena = self.input_buscar.text()
+        coincidencias = self.lst.buscar_registro(cadena)
+        if not coincidencias:
+            return
         grupo = QtW.QListWidgetItem(coincidencias[0][0])
         self.__grupo_selec = grupo
         self.grupos.addItem(grupo)
-        print(coincidencias)
         if coincidencias:
             self.productos.setRowCount(len(coincidencias))
             for fila, elemento in enumerate(coincidencias):
                 if elemento[0] == grupo.text():
                     indice = QtW.QTableWidgetItem(str(elemento[1]))
                     producto = QtW.QTableWidgetItem(elemento[2])
-                    estado = QtW.QTableWidgetItem(bool_to_str(elemento[3]))
+                    estado = QtW.QTableWidgetItem(bool_to_str(
+                        elemento[3]))
                     self.productos.setItem(fila, 0, indice)
                     self.productos.setItem(fila, 1, producto)
                     estado.setTextAlignment(Qt.AlignHCenter)

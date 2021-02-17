@@ -121,7 +121,6 @@ class ListaCompra():
     def buscar_registro(self, cadena):
         """Busca cadena en productos de todos los grupos."""
         salida = []
-        grupo_filtrados = []
         try:
             exp_regular = re.compile(cadena, re.IGNORECASE)
         except re.error as error:
@@ -130,12 +129,11 @@ class ListaCompra():
         tablas = self.grupos()
         for tabla in tablas:
             elementos = self.conseguir_elementos(tabla)
-            grupo_filtrados.append(tabla)
             for elemento in elementos:
                 indice, producto, estado = elemento
                 if exp_regular.search(producto):
                     salida.append((tabla, indice, producto, estado))
-        return [salida, grupo_filtrados]
+        return salida
 
 
 if __name__ == '__main__':

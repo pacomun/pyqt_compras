@@ -13,16 +13,12 @@ from sqlalchemy import MetaData
 from sqlalchemy.exc import NoSuchTableError
 
 
-# URI_BASE = 'mysql+pymysql://supermercado:@netbook/supermercado'
-URI_BASE = 'sqlite:///:memory:'
-
-
 class ListaCompra():
     """Crea un objeto conexión SQLAlchemy a una base de datos y con sus
     métodos podemos gestionar la base de datos.
 
     """
-    def __init__(self, base=URI_BASE):
+    def __init__(self, base):
         self.base = base
         self.engine = create_engine(self.base, echo=False)
         Session = sessionmaker(bind=self.engine)

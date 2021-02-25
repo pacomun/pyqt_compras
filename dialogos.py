@@ -47,19 +47,10 @@ class DialogoEditar(PyQt5.QtWidgets.QDialog):
         self.registro[2] = str_to_bool(self.estado.currentText())
         self.accept()
 
-
-class MyBarra(PyQt5.QtWidgets.QDialog):
-    """Documentation for MyBarra
-    Classe para ventana dialogo con barra de progreso
-    """
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        loadUi('barra_progreso.ui', self)
-        self.setModal(True)
-        self.pbr_progreso.setValue(0)
-
 class DialogoNuevo(PyQt5.QtWidgets.QDialog):
-    """ Documentar...
+    """Ventana de dialogo para recabar datos de entrada de un nuevo
+    producto.
+
     """
     def __init__(self, parent=None, lista=[]):
         super().__init__(parent)
@@ -81,8 +72,6 @@ if __name__ == '__main__':
     reg = [1, 'Algo', 0]
     mi_app = DialogoEditar(registro=reg, titulo='Edición de Registro')
     mi_app.show()
-    print(reg)    
-    mi_barra = MyBarra()
-    mi_barra.show()
+    print(reg)
 
     Aplicacion.exec_()

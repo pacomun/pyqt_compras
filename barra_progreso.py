@@ -6,9 +6,7 @@ import PyQt5.QtCore
 import threading
 import time
 from bd_supermercado import ListaCompra
-
-URI_BASE = 'mysql+pymysql://supermercado:@netbook/supermercado'
-
+from uri_base import URI_BASE
 
 class Ventana(PyQt5.QtWidgets.QDialog):
     """ Ventana de dialog con barra de progreso
@@ -33,6 +31,7 @@ class Ventana(PyQt5.QtWidgets.QDialog):
 
     def mi_slot(self, arg):
         print(arg)
+
 
 class HiloObjeto(threading.Thread, PyQt5.QtCore.QObject):
     """Un objeto hilo (Thread) para crea subproceso y además QObject, que

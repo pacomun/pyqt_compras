@@ -8,8 +8,7 @@ from bd_supermercado import ListaCompra
 from conversiones import bool_to_str
 from dialogos import DialogoEditar, DialogoNuevo
 from barra_progreso import DialogoBarra, HiloObjeto
-
-URI_BASE = 'mysql+pymysql://supermercado:@netbook/supermercado'
+from uri_base import URI_BASE
 
 
 class MyQMainWindow(QtW.QMainWindow):

@@ -87,10 +87,14 @@ class MyQMainWindow(QtW.QMainWindow):
             self.actualizar_grupos()
             self.mostrar_productos(self.__grupo_selec)
 
-    def nuevo_producto(self):
+    def nuevo_producto(self, grupo=None):
         """Método para entrada de un nuevo producto."""
         datos_entrada = []
-        datos_entrada.append(self.lst.grupos())
+        # Si grupo = None -> La llamada es desde el menú.
+        if not grupo:
+            datos_entrada.append(self.lst.grupos())
+        else:
+            datos_entrada.append([grupo.text(), ])
         dlg_nuevo = DialogoNuevo(self, datos_entrada)
         if dlg_nuevo.exec_() == QtW.QDialog.Accepted:
             self.lst.insertar(*datos_entrada)

@@ -1,0 +1,11 @@
+#+TITLE: Readme
+
+* Descripción
+Pyqt_compras es una aplicación de escritorio realizada en /Python/ con las
+librerías Qt. Tiene como objetivo crear un listado de elementos para comprar en
+el supermercado, que agrupamos por tipos de  elementos: comestibles, limpieza,
+aseo personal, etc.
+
+Los datos se guadan en una base de datos, que en este ejemplo es una base de
+datos /sqlite/, pero puede se de otro tipo si cambiamos al conector adecuado en
+la variable URI_BASE, contenida en el módulo =uri_base.py=.

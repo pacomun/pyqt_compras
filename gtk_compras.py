@@ -23,6 +23,7 @@ class MyGMainWindow(Gtk.Window):
         self.lista = ListaCompra(URI_BASE)
         self.store_element = Gtk.ListStore(int, str, bool)
         self.store_group = Gtk.ListStore(str)
+        self.group_selected = ""
         self.packing()
         self.full_list_groups()
 
@@ -77,6 +78,7 @@ class MyGMainWindow(Gtk.Window):
         model = widget.get_model()
         text = model[row][0]
         self.full_list_element(text)
+        self.group_selected = text
 
     def full_list_element(self, group):
         """Actualiza los elementos del grupo suministrado."""
@@ -89,8 +91,9 @@ class MyGMainWindow(Gtk.Window):
     def on_cell_toggled(self, widget, path):
         """Invierte el valor del estado seleccionado"""
         self.store_element[path][2] = not self.store_element[path][2]
-        print('id: ', self.store_element[path][0], 'estado: ',
-             int(self.store_element[path][2]))
+        self.lista.cambiar_estado(self.group_selected,
+                                  self.store_element[path][0],
+                                  int(self.store_element[path][2]))
 
 
 if __name__ == '__main__':

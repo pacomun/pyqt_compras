@@ -33,6 +33,8 @@ class MyGMainWindow(Gtk.Window):
         self.list_elements.append_column(column_element)
         render_state = Gtk.CellRendererToggle()
         column_state = Gtk.TreeViewColumn('Estado', render_state, active=2)
+        # Conecto señal a la segunda columna visible
+        render_state.connect('toggled', self.on_cell_toggled)
         self.list_elements.append_column(column_state)
 
     def packing(self):
@@ -57,9 +59,8 @@ class MyGMainWindow(Gtk.Window):
 
     def full_list_groups(self):
         """Llenamos los datos en LisStore"""
-
+        # Creo un modelo para asociar a TreeView para grupos
         grupos = self.lista.grupos()
-
 
         for group in grupos:
             self.store_group.append([group])
@@ -72,19 +73,24 @@ class MyGMainWindow(Gtk.Window):
         self.list_group.connect('row-activated', self.grupo_activado)
 
     def grupo_activado(self, widget, row, col):
-        """ Consigue el grupo activado."""
+        """ Consigue el grupo activado y muestra los elementos"""
         model = widget.get_model()
         text = model[row][0]
-        print(text)
         self.full_list_element(text)
 
     def full_list_element(self, group):
+        """Actualiza los elementos del grupo suministrado."""
         elements = self.lista.conseguir_elementos(group)
         self.store_element.clear()
 
         for element in elements:
-            print(element)
             self.store_element.append(element)
+
+    def on_cell_toggled(self, widget, path):
+        """Invierte el valor del estado seleccionado"""
+        self.store_element[path][2] = not self.store_element[path][2]
+        print('id: ', self.store_element[path][0], 'estado: ',
+             int(self.store_element[path][2]))
 
 
 if __name__ == '__main__':

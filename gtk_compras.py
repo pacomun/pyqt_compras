@@ -2,30 +2,41 @@
 con GTK.
 
 """
+import sys
 import gi
 from uri_base import URI_BASE
 from bd_supermercado import ListaCompra
 
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
+from gi.repository import Gio
 
 
-class MyGMainWindow(Gtk.Window):
+class MyGMainWindow(Gtk.ApplicationWindow):
     """Ventana principal de la aplicación de escritorio para lista de
     compras en supermercado
 
     """
-    def __init__(self):
-        super().__init__(title='Compras Supermercado')
+    def __init__(self, application):
+        super().__init__(application=application)
         self.set_default_size(1200, 800)
         self.list_group = Gtk.TreeView()
         self.list_elements = Gtk.TreeView()
         self.lista = ListaCompra(URI_BASE)
         self.store_element = Gtk.ListStore(int, str, bool)
         self.store_group = Gtk.ListStore(str)
+        self.menubutton = Gtk.MenuButton()
         self.group_selected = ""
         self.packing()
         self.full_list_groups()
+
+        # Crearmos el menú
+        menumodel = Gio.Menu()
+        self.menubutton.set_menu_model(menumodel)
+        menumodel.append("Grupos", "app.new")
+        menumodel.append("Productos", "app.quit")
+
+
 
         # Creamos las columnas de los elementos
         self.list_elements.set_model(self.store_element)
@@ -53,8 +64,9 @@ class MyGMainWindow(Gtk.Window):
         )
         hbox.pack_start(scrol_groups, True, True, 0)
         hbox.pack_start(scrol_elements, True, True, 0)
-        etiqueta1 = Gtk.Label(label='Etiqueta 1')
-        vbox.pack_start(etiqueta1, False, False, 10)
+        menubox = Gtk.Box()
+        menubox.pack_start(self.menubutton, False, False, 0)
+        vbox.pack_start(menubox, False, False, 0)
         vbox.pack_start(hbox, True, True, 0)
         self.add(vbox)
 
@@ -96,9 +108,27 @@ class MyGMainWindow(Gtk.Window):
                                   int(self.store_element[path][2]))
 
 
-if __name__ == '__main__':
-    win = MyGMainWindow()
-    win.connect("destroy", Gtk.main_quit)
-    win.show_all()
+class Application(Gtk.Application):
+    def __init__(self):
+        super().__init__()
 
-    Gtk.main()
+    def do_activate(self):
+        window = MyGMainWindow(self)
+        window.show_all()
+
+    def do_startup(self):
+        Gtk.Application.do_startup(self)
+
+        new_action = Gio.SimpleAction.new("new", None)
+        new_action.connect("activate", self.mensaje)
+        self.add_action(new_action)
+
+    def mensaje(self, valor, valor2):
+        print('Pulsado  ', valor)
+        print(valor2)
+
+
+if __name__ == '__main__':
+    application = Application()
+    exit_status = application.run(sys.argv)
+    sys.exit(exit_status)

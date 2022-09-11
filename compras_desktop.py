@@ -4,6 +4,7 @@ import PyQt5.QtGui as QtGui
 import PyQt5.QtWidgets as QtW
 from PyQt5.QtCore import Qt
 from PyQt5.uic import loadUi
+from PyQt5.QtGui import QTextDocument
 from bd_supermercado import ListaCompra
 from conversiones import bool_to_str
 from dialogos import DialogoEditar, DialogoNuevo
@@ -25,6 +26,8 @@ class MyQMainWindow(QtW.QMainWindow):
         self.grupos = self.uic.grupos
         self.productos = self.uic.productos
         self.statusbar = self.uic.statusbar
+        self.textEdit = self.uic.textEdit
+        self.textEdit.setReadOnly(True)
 
         # Menú
         self.menu = self.uic.menubar
@@ -44,6 +47,11 @@ class MyQMainWindow(QtW.QMainWindow):
         self.grupos.itemDoubleClicked.connect(self.nuevo_producto)
         self.productos.cellDoubleClicked.connect(self.celda_act)
         self.input_buscar.returnPressed.connect(self.buscar_registro)
+
+        # Coloco un texto de ejemplo
+        self.textEdit.setHtml('<h3>Cadena de ejemplo</h3>')
+        self.textEdit.append('<p>Cuerpo <b>del</b> texto</p>')
+
 
         # Instancio Dialogo para barra de progreso.
         self.bpr = DialogoBarra()

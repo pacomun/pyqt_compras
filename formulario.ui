@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1373</width>
-    <height>805</height>
+    <width>1863</width>
+    <height>891</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,13 +19,13 @@
      <rect>
       <x>10</x>
       <y>60</y>
-      <width>1351</width>
+      <width>1831</width>
       <height>771</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <property name="sizeConstraint">
-      <enum>QLayout::SetDefaultConstraint</enum>
+      <enum>QLayout::SetMaximumSize</enum>
      </property>
      <item>
       <widget class="QListWidget" name="grupos">
@@ -90,9 +90,6 @@
           <family>Noto Sans Devanagari UI Thin</family>
          </font>
         </property>
-        <property name="textAlignment">
-         <set>AlignCenter</set>
-        </property>
        </column>
        <column>
         <property name="text">
@@ -106,18 +103,18 @@
         <property name="toolTip">
          <string extracomment="0 No compar; 1 para comprar."/>
         </property>
-        <property name="textAlignment">
-         <set>AlignCenter</set>
-        </property>
        </column>
       </widget>
+     </item>
+     <item>
+      <widget class="QTextEdit" name="textEdit"/>
      </item>
     </layout>
    </widget>
    <widget class="QPushButton" name="btn_buscar">
     <property name="geometry">
      <rect>
-      <x>1230</x>
+      <x>1300</x>
       <y>10</y>
       <width>116</width>
       <height>43</height>
@@ -130,7 +127,7 @@
    <widget class="QLineEdit" name="input_buscar">
     <property name="geometry">
      <rect>
-      <x>850</x>
+      <x>920</x>
       <y>10</y>
       <width>371</width>
       <height>41</height>
@@ -146,8 +143,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1373</width>
-     <height>39</height>
+     <width>1863</width>
+     <height>28</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuLista">

@@ -131,6 +131,14 @@ class ListaCompra():
                     salida.append((tabla, indice, producto, estado))
         return salida
 
+    def elementos_a_comprar(self):
+        """Devuelve lista con elemento cuyo estado sea 1"""
+        elem_comprar = []
+        for grupo in self.grupos():
+            for elemento in self.conseguir_elementos(grupo):
+                if elemento[2] != 0:
+                    elem_comprar.append(elemento[1])
+        return elem_comprar
 
 if __name__ == '__main__':
     conn = ListaCompra('sqlite:///:memory:')
@@ -145,6 +153,9 @@ if __name__ == '__main__':
           conn.conseguir_elementos('aseo_personal'))
     conn.crear_grupo('congelados')
     conn.insertar('congelados', 'guisantes', 1)
+    conn.insertar('congelados', 'langostinos', 1)
+    conn.insertar('congelados', 'helados', 1)
+    conn.insertar('aseo_personal', 'Papel higiénico', 1)
     print(conn.grupos())
     salida = conn.conseguir_elementos('congelados')
     print(salida)
@@ -158,5 +169,8 @@ if __name__ == '__main__':
     print('Buscamos en BD Pasta: ')
     print(conn.buscar_registro('guisantes'))
     print(conn.buscar_registro('*'))
+    print('Elementos a commprar:')
+    for elem in conn.elementos_a_comprar():
+        print(elem)
     conn.borrar_grupo('aseo_personal')
     conn.borrar_grupo('congelados')

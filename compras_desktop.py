@@ -43,15 +43,11 @@ class MyQMainWindow(QtW.QMainWindow):
         # Inicio lista de grupos y conecto slots
         self.actualizar_grupos()
         self.__grupo_selec = None
+        self.actualizar_textEdit()
         self.grupos.itemClicked.connect(self.mostrar_productos)
         self.grupos.itemDoubleClicked.connect(self.nuevo_producto)
         self.productos.cellDoubleClicked.connect(self.celda_act)
         self.input_buscar.returnPressed.connect(self.buscar_registro)
-
-        # Coloco un texto de ejemplo
-        self.textEdit.setHtml('<h3>Cadena de ejemplo</h3>')
-        self.textEdit.append('<p>Cuerpo <b>del</b> texto</p>')
-
 
         # Instancio Dialogo para barra de progreso.
         self.bpr = DialogoBarra()
@@ -159,7 +155,9 @@ class MyQMainWindow(QtW.QMainWindow):
         self.productos.setRowCount(0)
 
     def mostrar_productos(self, elec):
-        """Carga la tabla con el grupo escepecificado en 'elec'"""
+        """Carga la tabla con el grupo escepecificado en 'elec'. Actualizor la
+        lista de elementos a comprar por si cambia"""
+        self.actualizar_textEdit()
         self.__grupo_selec = elec
         if self.__grupo_selec is None:
             self.limpiar_tabla()
@@ -185,8 +183,16 @@ class MyQMainWindow(QtW.QMainWindow):
         self.bpr.show()
         hilo.start()
 
+    def actualizar_textEdit(self):
+        """Limpia el texto de textEdit y lo actualiza."""
+        elem_a_comprar = self.lst.elementos_a_comprar()
+        self.textEdit.clear()
+        for elemento in elem_a_comprar:
+            self.textEdit.append(f'<ul><li><em>{elemento}</em></li></ul>')
+
     def actualizar(self):
         self.mostrar_productos(self.__grupo_selec)
+        self.actualizar_textEdit()
         self.statusbar.showMessage('La tabla se ha limpiado.')
 
     def borrar_producto(self):
